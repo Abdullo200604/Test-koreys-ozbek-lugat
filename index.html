@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koreyscha so'z testi</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        .quiz-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .korean-word {
+            font-size: 3em;
+            font-weight: bold;
+            color: #0056b3;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1.1em;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #next-btn {
+            background-color: #28a745;
+            margin-top: 10px;
+        }
+        #next-btn:hover {
+            background-color: #218838;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+        .correct {
+            color: #28a745;
+        }
+        .incorrect {
+            color: #dc3545;
+        }
+        .progress {
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <h2 id="question-title">Koreyscha so'zni tarjima qiling:</h2>
+        <div id="korean-word" class="korean-word"></div>
+        <input type="text" id="answer-input" placeholder="O'zbekcha tarjimasi...">
+        <button id="check-btn">Tekshirish</button>
+        <div id="result" class="result"></div>
+        <button id="next-btn" style="display: none;">Keyingisi</button>
+        <div id="progress" class="progress"></div>
+    </div>
+
+    <script>
+        const words = [
+            { korean: "거리", uzbek: "ko'cha" },
+            { korean: "다리", uzbek: "oyoq, ko'prik" },
+            { korean: "얼마", uzbek: "qancha" },
+            { korean: "일어나다", uzbek: "turmoq" },
+            { korean: "빨리", uzbek: "tez" },
+            { korean: "몰라요", uzbek: "bilmiman" },
+            { korean: "알아요", uzbek: "bilaman" },
+            { korean: "우리", uzbek: "biz" },
+            { korean: "나라", uzbek: "davlat" },
+            { korean: "오리", uzbek: "o'rdak" }
+        ];
+
+        let currentWordIndex = 0;
+
+        const koreanWordEl = document.getElementById('korean-word');
+        const answerInputEl = document.getElementById('answer-input');
+        const checkBtn = document.getElementById('check-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const resultEl = document.getElementById('result');
+        const progressEl = document.getElementById('progress');
+        const questionTitleEl = document.getElementById('question-title');
+
+        function loadWord() {
+            if (currentWordIndex < words.length) {
+                const currentWord = words[currentWordIndex];
+                koreanWordEl.textContent = currentWord.korean;
+                answerInputEl.value = '';
+                resultEl.innerHTML = '';
+                answerInputEl.disabled = false;
+                checkBtn.style.display = 'block';
+                nextBtn.style.display = 'none';
+                progressEl.textContent = `${currentWordIndex + 1} / ${words.length}`;
+                answerInputEl.focus();
+            } else {
+                koreanWordEl.textContent = "👍";
+                questionTitleEl.textContent = "Test yakunlandi!";
+                answerInputEl.style.display = 'none';
+                checkBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+                resultEl.innerHTML = '';
+                progressEl.textContent = '';
+            }
+        }
+
+        function checkAnswer() {
+            const userAnswer = answerInputEl.value.trim().toLowerCase();
+            const correctAnswer = words[currentWordIndex].uzbek.toLowerCase();
+            
+            answerInputEl.disabled = true;
+            checkBtn.style.display = 'none';
+            nextBtn.style.display = 'block';
+
+            if (userAnswer === correctAnswer) {
+                resultEl.innerHTML = `To'g'ri! <span class="correct">"${words[currentWordIndex].uzbek}"</span>`;
+                resultEl.className = 'result correct';
+            } else {
+                 resultEl.innerHTML = `Xato! To'g'ri javob: <span class="incorrect">"${words[currentWordIndex].uzbek}"</span>`;
+                 resultEl.className = 'result incorrect';
+            }
+        }
+
+        checkBtn.addEventListener('click', checkAnswer);
+        answerInputEl.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentWordIndex++;
+            loadWord();
+        });
+
+        // Birinchi so'zni yuklash
+        loadWord();
+    </script>
+
+</body>
+  </html>
