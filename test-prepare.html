@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testga tayyorgarlik</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .prepare-card { min-height: 200px; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 1px solid #ddd; border-radius: 8px; padding: 20px; }
+        .prepare-korean { font-size: 3em; }
+        .prepare-uzbek { font-size: 1.5em; color: #555; margin-top: 10px; }
+        .navigation { display: flex; justify-content: space-between; width: 100%; margin-top: 20px;}
+        .final-screen { text-align: center; }
+        .final-screen .korean-title { font-size: 2em; margin-bottom: 20px; }
+        .btn-korean { display: flex; flex-direction: column; align-items: center; }
+        .btn-korean .main-text { font-size: 1.2em; font-weight: bold; }
+        .btn-korean .sub-text { font-size: 0.8em; }
+        .btn-green { background-color: #28a745; }
+        .btn-red { background-color: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="prepare-view">
+            <h1>So'zlarni takrorlang</h1>
+            <div class="prepare-card">
+                <div id="korean-word" class="prepare-korean"></div>
+                <div id="uzbek-word" class="prepare-uzbek"></div>
+            </div>
+            <div class="navigation">
+                <button id="prev-btn" class="btn">⬅️ Orqaga</button>
+                <button id="next-btn" class="btn">Oldinga ➡️</button>
+            </div>
+        </div>
+        
+        <div id="final-screen" class="final-screen" style="display:none;">
+            <h2 class="korean-title">준비됐나요?</h2>
+            <div class="menu">
+                <button id="restart-prepare-btn" class="btn btn-red btn-korean">
+                    <span class="main-text">다시 공부하기</span>
+                    <span class="sub-text">(Qayta o'qish)</span>
+                </button>
+                <button id="start-main-test-btn" class="btn btn-green btn-korean">
+                    <span class="main-text">시작하기</span>
+                    <span class="sub-text">(Boshlash)</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const testWords = JSON.parse(sessionStorage.getItem('testWords'));
+            if (!testWords || testWords.length === 0) {
+                window.location.href = 'test-selection.html';
+                return;
+            }
+
+            let currentIndex = 0;
+            const koreanEl = document.getElementById('korean-word');
+            const uzbekEl = document.getElementById('uzbek-word');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            
+            function showWord(index) {
+                koreanEl.textContent = testWords[index].korean;
+                uzbekEl.textContent = testWords[index].uzbek;
+                prevBtn.disabled = index === 0;
+                
+                if (index === testWords.length - 1) {
+                    nextBtn.textContent = "Tayyormisiz?";
+                } else {
+                    nextBtn.textContent = "Oldinga ➡️";
+                }
+            }
+
+            nextBtn.addEventListener('click', () => {
+                if (currentIndex < testWords.length - 1) {
+                    currentIndex++;
+                    showWord(currentIndex);
+                } else {
+                    // Oxirgi so'zdan keyin
+                    document.getElementById('prepare-view').style.display = 'none';
+                    document.getElementById('final-screen').style.display = 'block';
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    showWord(currentIndex);
+                }
+            });
+
+            document.getElementById('restart-prepare-btn').addEventListener('click', () => {
+                currentIndex = 0;
+                showWord(currentIndex);
+                document.getElementById('prepare-view').style.display = 'block';
+                document.getElementById('final-screen').style.display = 'none';
+            });
+            
+            document.getElementById('start-main-test-btn').addEventListener('click', () => {
+                window.location.href = 'test-main.html';
+            });
+
+            showWord(currentIndex);
+        });
+    </script>
+</body>
+</html>
