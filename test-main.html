@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .test-area { min-height: 300px; }
+        /* 1-bosqich stillari */
+        .spelling-inputs { display: flex; gap: 5px; justify-content: center; margin-top: 15px; }
+        .spelling-inputs input { width: 40px; height: 50px; text-align: center; font-size: 1.5em; border: 2px solid #ccc; border-radius: 5px; }
+        /* 2- va 3-bosqich stillari */
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .option-btn { padding: 20px; font-size: 1.2em; background-color: #f8f9fa; color: #333; border: 1px solid #ddd; }
+        .option-btn.correct { background-color: #28a745; color: white; }
+        .option-btn.incorrect { background-color: #dc3545; color: white; }
+        #question-image { max-width: 150px; max-height: 150px; margin: 15px auto; display: block; border-radius: 8px; }
+        #feedback { margin-top: 20px; font-weight: bold; font-size: 1.2em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="stage-title">1-Bosqich</h1>
+        <div class="test-area">
+            <h2 id="question-prompt"></h2>
+            <img id="question-image" style="display:none;">
+            <div id="answer-area"></div>
+        </div>
+        <div id="feedback"></div>
+        <div id="lives">Hayotlar: ❤️ ❤️</div>
+    </div>
+    
+    <script>
+    // TEST LOGIKASI (bu kod katta bo'lgani uchun shu yerga joylandi)
+    document.addEventListener('DOMContentLoaded', () => {
+        const testWords = JSON.parse(sessionStorage.getItem('testWords'));
+        if (!testWords || testWords.length === 0) {
+            window.location.href = 'test-selection.html';
+            return;
+        }
+
+        // Elementlar
+        const stageTitleEl = document.getElementById('stage-title');
+        const questionPromptEl = document.getElementById('question-prompt');
+        const questionImageEl = document.getElementById('question-image');
+        const answerAreaEl = document.getElementById('answer-area');
+        const feedbackEl = document.getElementById('feedback');
+        const livesEl = document.getElementById('lives');
+
+        // Test holati
+        let currentWordIndex = 0;
+        let currentStage = 1;
+        let lives = 2;
+        let score = 0;
+        let currentWord = testWords[currentWordIndex];
+
+        // Testni boshlash
+        function startTest() {
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            currentWord = testWords[currentWordIndex];
+            lives = 2;
+            updateLives();
+            feedbackEl.textContent = '';
+            questionImageEl.style.display = 'none';
+
+            if (currentStage === 1) {
+                renderStage1();
+            } else if (currentStage === 2) {
+                renderStage2();
+            } else if (currentStage === 3) {
+                renderStage3();
+            } else {
+                // Test tugadi
+                showResults();
+            }
+        }
+
+        // 1-BOSQICH: Yozish
+        function renderStage1() {
+            stageTitleEl.textContent = "1-Bosqich: To'g'ri yozing";
+            questionPromptEl.textContent = currentWord.uzbek;
+            answerAreaEl.innerHTML = `<div class="spelling-inputs" id="spelling-inputs"></div>`;
+            const inputsContainer = document.getElementById('spelling-inputs');
+            for (let i = 0; i < currentWord.korean.length; i++) {
+                inputsContainer.innerHTML += `<input type="text" maxlength="1">`;
+            }
+            inputsContainer.firstChild.focus();
+            
+            // Avtomatik keyingi katakka o'tish
+            inputsContainer.addEventListener('input', (e) => {
+                if (e.target.value.length === 1 && e.target.nextElementSibling) {
+                    e.target.nextElementSibling.focus();
+                }
+                checkStage1Answer(false);
+            });
+        }
+        
+        function checkStage1Answer(finalCheck) {
+            const inputs = document.querySelectorAll('#spelling-inputs input');
+            let answeredWord = '';
+            inputs.forEach(input => answeredWord += input.value);
+            
+            if (finalCheck || answeredWord.length === currentWord.korean.length) {
+                if (answeredWord === currentWord.korean) {
+                    feedbackEl.textContent = "To'g'ri!";
+                    feedbackEl.style.color = 'green';
+                    score++;
+                    setTimeout(nextQuestion, 1000);
+                } else {
+                    lives--;
+                    updateLives();
+                    feedbackEl.textContent = "Xato!";
+                    feedbackEl.style.color = 'red';
+                    if (lives === 0) {
+                        feedbackEl.textContent += ` To'g'ri javob: ${currentWord.korean}`;
+                        setTimeout(nextQuestion, 2000);
+                    }
+                }
+            }
+        }
+        
+        // Keyingi savol/bosqichga o'tish
+        function nextQuestion() {
+            currentWordIndex++;
+            if (currentWordIndex >= testWords.length) {
+                currentStage++;
+                currentWordIndex = 0;
+            }
+            loadQuestion();
+        }
+        
+        function showResults() {
+             answerAreaEl.innerHTML = `<h2>Test Yakunlandi!</h2><p>Natijangiz: ${score} / ${testWords.length * 3}</p><a href="index.html" class="btn">Bosh sahifaga</a>`;
+        }
+
+        function updateLives() {
+            livesEl.textContent = 'Hayotlar: ' + '❤️ '.repeat(lives);
+        }
+
+        // QOLGAN BOSQICHLAR UCHUN SHU YERGA KOD YOZILADI (renderStage2, renderStage3...)
+        // Bu bosqichlar ham yuqoridagiga o'xshash mantiq bilan ishlaydi.
+        // Hozircha faqat 1-bosqichni ishga tushiramiz.
+        startTest();
+    });
+    </script>
+</body>
+</html>
