@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lug'atlar</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1 id="lesson-title">Dars Lug'atlari</h1>
+        
+        <button id="add-word-btn" class="btn admin-only" style="display: none;">+ Yangi so'z qo'shish</button>
+        
+        <div id="vocabulary-list"></div>
+        
+        <a href="lessons.html" class="btn btn-secondary">Darslarga qaytish</a>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const lessonId = urlParams.get('lesson');
+            
+            if (!lessonId) {
+                window.location.href = 'lessons.html';
+                return;
+            }
+            
+            document.getElementById('lesson-title').textContent = `${lessonId}-Dars Lug'atlari`;
+            
+            // Lug'atlarni ko'rsatish
+            renderVocabulary(lessonId);
+
+            // Admin bo'lsa "qo'shish" tugmasini ko'rsatamiz
+            if (isAdmin()) {
+                document.getElementById('add-word-btn').style.display = 'block';
+            }
+            
+            // "Yangi so'z qo'shish" tugmasini bosganda
+            document.getElementById('add-word-btn').addEventListener('click', () => {
+                const korean = prompt("Yangi koreyscha so'zni kiriting:");
+                if (korean === null || korean.trim() === '') return;
+                
+                const uzbek = prompt(`"${korean}" so'zining o'zbekcha tarjimasini kiriting:`);
+                if (uzbek === null || uzbek.trim() === '') return;
+                
+                const imageUrl = prompt("Ushbu so'z uchun rasm manzilini (URL) kiriting (ixtiyoriy):");
+                
+                addWord(lessonId, { 
+                    korean, 
+                    uzbek, 
+                    imageUrl: imageUrl || '' 
+                });
+                renderVocabulary(lessonId); // Sahifani yangilash
+            });
+        });
+    </script>
+</body>
+</html>
