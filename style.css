@@ -212,3 +212,35 @@ p {
 #question-image { max-width: 150px; max-height: 150px; margin: 15px auto; display: block; border-radius: 8px; }
 #feedback { margin-top: 20px; font-weight: bold; font-size: 1.2em; min-height: 25px; }
 #lives { font-size: 1.2em; color: #e74c3c; margin-top: 10px;}
+
+/* style.css faylining oxiriga qo'shing */
+
+/* Admin rejimiga kirish uchun maxfiy belgi stili */
+#admin-icon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 12px;
+    height: 12px;
+    background-color: #e0e0e0;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#admin-icon:hover {
+    background-color: #c0c0c0;
+}
+
+/* Konteynerga position: relative qo'shish kerak,
+   chunki ichidagi #admin-icon absolute joylashadi */
+.container {
+    position: relative; /* Shu qatorni qo'shish muhim */
+    width: 95%;
+    max-width: 600px;
+    background: white;
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    text-align: center;
+}
