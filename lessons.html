@@ -1,25 +1,53 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Darslar</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lug‘atlar</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Darslar Ro'yxati</h1>
-        <p>O'rganishni istagan darsingizni tanlang.</p>
-        
-        <div class="menu" id="lessons-list">
-            <a href="vocabulary.html?lesson=1" class="btn">1-Dars</a>
-            <a href="vocabulary.html?lesson=2" class="btn">2-Dars</a>
-            
-            </div>
-        
-        <a href="index.html" class="btn btn-secondary">Bosh sahifaga</a>
+  <!-- Orqa fon animatsiyasi -->
+  <div class="background-animation">
+    <div class="trigram">☰</div>
+    <div class="trigram">☷</div>
+    <div class="trigram">☵</div>
+    <div class="trigram">☲</div>
+  </div>
+
+  <div class="main-container">
+    <header class="main-header">
+      <h1 class="title">📚 Lug‘atlar</h1>
+      <p class="subtitle">Koreyscha – O‘zbekcha so‘zlarni o‘rganing</p>
+    </header>
+
+    <!-- Lug‘atlar ro‘yxati -->
+    <div class="lessons-list">
+      <a href="vocabulary.html" class="lesson-card">
+        <h2>🔤 Asosiy so‘zlar</h2>
+        <p>Kundalik hayotda ishlatiladigan so‘zlar</p>
+      </a>
+
+      <a href="phrases.html" class="lesson-card">
+        <h2>💬 Iboralar</h2>
+        <p>Eng ko‘p ishlatiladigan jumlalar</p>
+      </a>
+
+      <a href="food.html" class="lesson-card">
+        <h2>🍲 Taomlar</h2>
+        <p>Koreys taomlari nomlari</p>
+      </a>
+
+      <a href="places.html" class="lesson-card">
+        <h2>🏙️ Joylar</h2>
+        <p>Shahar, ko‘cha va manzillar</p>
+      </a>
     </div>
 
-    <script src="app.js"></script>
+    <!-- Orqaga qaytish tugmasi -->
+    <div class="back-button">
+      <a href="index.html" class="nav-button">⬅️ Bosh sahifa</a>
+    </div>
+  </div>
 </body>
 </html>
