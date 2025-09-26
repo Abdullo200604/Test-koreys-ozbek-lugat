@@ -1,68 +1,40 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lug'atlar</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lug‘atlar</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="app.js"></script>
 </head>
-<body>
-    <div class="container">
-        <h1 id="lesson-title">Dars Lug'atlari</h1>
-        
-        <button id="add-word-btn" class="btn" style="display: none; background-color: #17a2b8; margin-bottom: 15px;">
-            + Yangi so'z qo'shish
-        </button>
-        
-        <div id="vocabulary-list">
-            </div>
-        
-        <a href="lessons.html" class="btn btn-secondary">Darslarga qaytish</a>
+<body class="vocabulary-body">
+  <div class="main-container">
+    <header class="main-header">
+      <h1 class="title">📚 Lug‘atlar</h1>
+      <p class="subtitle">So‘zlar ro‘yxati va talaffuz</p>
+    </header>
+
+    <!-- Lug‘atlar jadvali -->
+    <section class="vocabulary-section">
+      <table class="vocabulary-table">
+        <thead>
+          <tr>
+            <th>Koreyscha</th>
+            <th>O‘zbekcha</th>
+            <th>Talaffuz</th>
+          </tr>
+        </thead>
+        <tbody id="vocabulary-list">
+          <!-- So‘zlar app.js orqali qo‘shiladi -->
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Orqaga tugmalar -->
+    <div class="button-group">
+      <a href="index.html" class="nav-button">🏠 Bosh sahifa</a>
+      <a href="lessons.html" class="nav-button">📖 Darslar</a>
     </div>
-
-    <script src="app.js"></script>
-
-    <script>
-        // Sahifa to'liq yuklangandan so'ng bu kod ishga tushadi
-        document.addEventListener('DOMContentLoaded', () => {
-            // Manzildan dars raqamini olamiz (masalan, "?lesson=1" dan "1" ni)
-            const urlParams = new URLSearchParams(window.location.search);
-            const lessonId = urlParams.get('lesson');
-            
-            // Agar manzil noto'g'ri bo'lsa yoki dars raqami bo'lmasa, darslar sahifasiga qaytarib yuboramiz
-            if (!lessonId) {
-                window.location.href = 'lessons.html';
-                return;
-            }
-            
-            // Sahifa sarlavhasini o'zgartiramiz (masalan, "1-Dars Lug'atlari")
-            document.getElementById('lesson-title').textContent = `${lessonId}-Dars Lug'atlari`;
-            
-            // app.js faylidagi renderVocabulary funksiyasini chaqirib, so'zlarni ekranga chizamiz
-            renderVocabulary(lessonId);
-
-            // Agar foydalanuvchi Admin bo'lsa, "Yangi so'z qo'shish" tugmasini ko'rsatamiz
-            if (isAdmin()) {
-                document.getElementById('add-word-btn').style.display = 'block';
-            }
-            
-            // "Yangi so'z qo'shish" tugmasi bosilganda...
-            document.getElementById('add-word-btn').addEventListener('click', () => {
-                const korean = prompt("Yangi koreyscha so'zni kiriting:");
-                if (korean === null || korean.trim() === '') return;
-                
-                const uzbek = prompt(`"${korean}" so'zining o'zbekcha tarjimasini kiriting:`);
-                if (uzbek === null || uzbek.trim() === '') return;
-                
-                const imageUrl = prompt("Ushbu so'z uchun rasm manzilini (URL) kiriting (ixtiyoriy):");
-                
-                // app.js dagi addWord funksiyasi orqali yangi so'zni xotiraga qo'shamiz
-                addWord(lessonId, { korean, uzbek, imageUrl: imageUrl || '' });
-                
-                // Sahifani yangilab, yangi qo'shilgan so'zni ko'rsatamiz
-                renderVocabulary(lessonId);
-            });
-        });
-    </script>
+  </div>
 </body>
 </html>

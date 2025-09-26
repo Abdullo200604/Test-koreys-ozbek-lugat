@@ -1,83 +1,28 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test uchun so'z tanlash</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Tanlash</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="container">
-        <h1>Test uchun so'zlarni tanlang</h1>
-        <p>Maksimal <strong>15</strong> ta so'z tanlashingiz mumkin. <br>Tanlandi: <span id="counter">0</span></p>
-        
-        <div class="word-selection-list" id="word-list">
-            </div>
-        
-        <button id="start-test-btn" class="btn" disabled>Tayyorgarlikni Boshlash</button>
-        <a href="index.html" class="btn btn-secondary">Bosh sahifaga</a>
-    </div>
+<body class="test-body">
+  <div class="main-container">
+    <header class="main-header">
+      <h1 class="title">📝 Test Tanlash</h1>
+      <p class="subtitle">Kerakli test turini tanlang</p>
+    </header>
 
-    <script src="app.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const MAX_WORDS = 15;
-            const wordListContainer = document.getElementById('word-list');
-            const counterEl = document.getElementById('counter');
-            const startBtn = document.getElementById('start-test-btn');
-            
-            const db = getVocabulary();
-            let allWords = [];
-            
-            // Barcha darslardagi so'zlarni bitta massivga yig'ish
-            for (const lessonKey in db) {
-                allWords = allWords.concat(db[lessonKey]);
-            }
+    <nav class="main-nav">
+      <a href="test-words.html" class="nav-button"><span>📚 Lug‘at testi</span></a>
+      <a href="test-examples.html" class="nav-button"><span>📖 Misol testi</span></a>
+      <a href="test-harflar.html" class="nav-button"><span>🔤 Harf testi</span></a>
+      <a href="test-raqamlar.html" class="nav-button"><span>🔢 Raqam testi</span></a>
+    </nav>
 
-            // So'zlarni ekranga chiqarish
-            allWords.forEach((word) => {
-                // Faqat kerakli ma'lumotlarni saqlaymiz, xatolikni oldini olish uchun
-                const wordData = JSON.stringify({
-                    korean: word.korean,
-                    uzbek: word.uzbek,
-                    imageUrl: word.imageUrl || ''
-                });
-
-                const label = document.createElement('label');
-                label.className = 'word-checkbox';
-                label.innerHTML = `
-                    <input type="checkbox" value='${wordData}'>
-                    <span><strong>${word.korean}</strong> - ${word.uzbek}</span>
-                `;
-                wordListContainer.appendChild(label);
-            });
-
-            // Checkbox'larni tanlash jarayonini kuzatish
-            wordListContainer.addEventListener('change', (event) => {
-                const selectedCheckboxes = document.querySelectorAll('#word-list input:checked');
-                counterEl.textContent = selectedCheckboxes.length;
-                
-                if (selectedCheckboxes.length > MAX_WORDS) {
-                    event.target.checked = false; // 15 tadan ortiq tanlashni bloklash
-                    alert(`Maksimal ${MAX_WORDS} ta so'z tanlash mumkin!`);
-                    counterEl.textContent = MAX_WORDS; // Hisoblagichni to'g'rilash
-                }
-                
-                startBtn.disabled = selectedCheckboxes.length === 0;
-            });
-
-            // "Tayyorgarlikni Boshlash" tugmasi bosilganda
-            startBtn.addEventListener('click', () => {
-                const selectedWords = [];
-                document.querySelectorAll('#word-list input:checked').forEach(checkbox => {
-                    selectedWords.push(JSON.parse(checkbox.value));
-                });
-                
-                // Tanlangan so'zlarni keyingi sahifaga uzatish uchun vaqtinchalik xotiraga saqlash
-                sessionStorage.setItem('testWords', JSON.stringify(selectedWords));
-                window.location.href = 'test-prepare.html';
-            });
-        });
-    </script>
+    <footer class="footer">
+      <a href="index.html" class="back-button">⬅️ Orqaga</a>
+    </footer>
+  </div>
 </body>
 </html>

@@ -1,142 +1,39 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="app.js"></script>
 </head>
-<body>
-    <div class="container">
-        <h1 id="stage-title">1-Bosqich</h1>
-        <div class="test-area">
-            <h2 id="question-prompt" style="font-size: 1.8em;"></h2>
-            <img id="question-image" style="display:none;">
-            <div id="answer-area"></div>
-        </div>
-        <div id="feedback"></div>
-        <div id="lives"></div>
-    </div>
-    
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const testWords = JSON.parse(sessionStorage.getItem('testWords'));
-        if (!testWords || testWords.length === 0) {
-            window.location.href = 'test-selection.html';
-            return;
-        }
+<body class="test-body">
+  <div class="main-container">
+    <header class="main-header">
+      <h1 class="title">📝 Test</h1>
+      <p class="subtitle">Savollarga javob bering</p>
+    </header>
 
-        const stageTitleEl = document.getElementById('stage-title');
-        const questionPromptEl = document.getElementById('question-prompt');
-        const answerAreaEl = document.getElementById('answer-area');
-        const feedbackEl = document.getElementById('feedback');
-        const livesEl = document.getElementById('lives');
-        const container = document.querySelector('.container');
+    <!-- Test oynasi -->
+    <section id="test-container" class="test-box">
+      <div id="question" class="question-text">Savol bu yerda chiqadi</div>
+      <div id="answer-buttons" class="answer-buttons">
+        <!-- Javob tugmalari JS orqali qo‘shiladi -->
+      </div>
+      <div class="button-group">
+        <button id="next-btn" class="nav-button next-button" disabled>Keyingi ➡️</button>
+      </div>
+    </section>
 
-        let currentWordIndex = 0;
-        let lives = 2;
-        let score = 0;
-        let currentWord = testWords[currentWordIndex];
-
-        function startTest() {
-            loadStage1();
-        }
-
-        function loadStage1() {
-            if (currentWordIndex >= testWords.length) {
-                showResults(); // Agar so'zlar tugasa, natijani ko'rsatish
-                return;
-            }
-            currentWord = testWords[currentWordIndex];
-            lives = 2;
-            updateLives();
-            feedbackEl.textContent = '';
-            
-            stageTitleEl.textContent = "1-Bosqich: To'g'ri yozing";
-            questionPromptEl.textContent = currentWord.uzbek;
-            answerAreaEl.innerHTML = `<div class="spelling-inputs" id="spelling-inputs"></div>`;
-            const inputsContainer = document.getElementById('spelling-inputs');
-            
-            for (let i = 0; i < currentWord.korean.length; i++) {
-                inputsContainer.innerHTML += `<input type="text" maxlength="1" autocomplete="off">`;
-            }
-            
-            const inputs = inputsContainer.querySelectorAll('input');
-            inputs[0].focus();
-            
-            inputs.forEach((input, index) => {
-                input.addEventListener('input', () => {
-                    if (input.value && index < inputs.length - 1) {
-                        inputs[index + 1].focus();
-                    }
-                    checkFullAnswer();
-                });
-                input.addEventListener('keydown', (e) => {
-                    if (e.key === "Backspace" && !input.value && index > 0) {
-                        inputs[index - 1].focus();
-                    }
-                });
-            });
-        }
-        
-        function checkFullAnswer() {
-            const inputs = document.querySelectorAll('#spelling-inputs input');
-            let answeredWord = '';
-            inputs.forEach(input => answeredWord += input.value);
-
-            if (answeredWord.length === currentWord.korean.length) {
-                if (answeredWord === currentWord.korean) {
-                    feedbackEl.textContent = "✅ To'g'ri!";
-                    feedbackEl.style.color = 'green';
-                    score++;
-                    disableInputs(true);
-                    setTimeout(nextQuestion, 1500);
-                } else {
-                    lives--;
-                    updateLives();
-                    feedbackEl.textContent = "❌ Xato!";
-                    feedbackEl.style.color = 'red';
-                    if (lives === 0) {
-                        feedbackEl.textContent += ` To'g'ri javob: ${currentWord.korean}`;
-                        disableInputs(true);
-                        setTimeout(nextQuestion, 2500);
-                    } else {
-                        // Qayta urinish uchun katakchalarni tozalash
-                        setTimeout(() => { 
-                            inputs.forEach(input => input.value = '');
-                            inputs[0].focus();
-                            feedbackEl.textContent = "Qayta urining...";
-                         }, 1000);
-                    }
-                }
-            }
-        }
-
-        function disableInputs(state) {
-            document.querySelectorAll('#spelling-inputs input').forEach(input => input.disabled = state);
-        }
-        
-        function nextQuestion() {
-            currentWordIndex++;
-            loadStage1();
-        }
-        
-        function showResults() {
-             container.innerHTML = `
-                <h1>🏆 Test Yakunlandi!</h1>
-                <p style="font-size: 1.2em;">Natijangiz:</p>
-                <h2 style="font-size: 2.5em;">${score} / ${testWords.length}</h2>
-                <a href="test-selection.html" class="btn">Qayta topshirish</a>
-                <a href="index.html" class="btn btn-secondary">Bosh sahifaga</a>
-             `;
-        }
-
-        function updateLives() {
-            livesEl.innerHTML = 'Imkoniyatlar: ' + '❤️ '.repeat(lives) + '🖤 '.repeat(2 - lives);
-        }
-        
-        startTest();
-    });
-    </script>
+    <!-- Yakuniy natija -->
+    <section id="result-container" class="result-box hidden">
+      <h2>📊 Natija</h2>
+      <p id="result-text">Sizning natijangiz: </p>
+      <div class="button-group">
+        <a href="test-selection.html" class="nav-button">⬅️ Testlar ro‘yxati</a>
+        <a href="index.html" class="nav-button">🏠 Bosh sahifa</a>
+      </div>
+    </section>
+  </div>
 </body>
 </html>
