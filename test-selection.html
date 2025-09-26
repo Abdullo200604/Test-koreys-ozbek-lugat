@@ -5,21 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test uchun so'z tanlash</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .word-selection-list { max-height: 400px; overflow-y: auto; text-align: left; border: 1px solid #eee; padding: 10px; border-radius: 8px; }
-        .word-checkbox { display: flex; align-items: center; padding: 10px; cursor: pointer; border-radius: 5px; }
-        .word-checkbox:hover { background-color: #f0f2f5; }
-        .word-checkbox input { margin-right: 15px; width: 20px; height: 20px; }
-        #start-test-btn { margin-top: 20px; background-color: #28a745; }
-        #counter { font-weight: bold; }
-    </style>
 </head>
 <body>
     <div class="container">
         <h1>Test uchun so'zlarni tanlang</h1>
-        <p>Maksimal <span id="max-words">15</span> ta so'z tanlashingiz mumkin. Tanlandi: <span id="counter">0</span></p>
+        <p>Maksimal <strong>15</strong> ta so'z tanlashingiz mumkin. <br>Tanlandi: <span id="counter">0</span></p>
+        
         <div class="word-selection-list" id="word-list">
             </div>
+        
         <button id="start-test-btn" class="btn" disabled>Tayyorgarlikni Boshlash</button>
         <a href="index.html" class="btn btn-secondary">Bosh sahifaga</a>
     </div>
@@ -35,44 +29,51 @@
             const db = getVocabulary();
             let allWords = [];
             
-            // Barcha darslardagi so'zlarni yig'ish
-            for (const lesson in db) {
-                allWords = allWords.concat(db[lesson]);
+            // Barcha darslardagi so'zlarni bitta massivga yig'ish
+            for (const lessonKey in db) {
+                allWords = allWords.concat(db[lessonKey]);
             }
 
             // So'zlarni ekranga chiqarish
-            allWords.forEach((word, index) => {
+            allWords.forEach((word) => {
+                // Faqat kerakli ma'lumotlarni saqlaymiz, xatolikni oldini olish uchun
+                const wordData = JSON.stringify({
+                    korean: word.korean,
+                    uzbek: word.uzbek,
+                    imageUrl: word.imageUrl || ''
+                });
+
                 const label = document.createElement('label');
                 label.className = 'word-checkbox';
                 label.innerHTML = `
-                    <input type="checkbox" value='${JSON.stringify(word)}'>
-                    <span>${word.korean} - ${word.uzbek}</span>
+                    <input type="checkbox" value='${wordData}'>
+                    <span><strong>${word.korean}</strong> - ${word.uzbek}</span>
                 `;
                 wordListContainer.appendChild(label);
             });
 
-            // Checkbox'larni kuzatish
-            wordListContainer.addEventListener('change', () => {
+            // Checkbox'larni tanlash jarayonini kuzatish
+            wordListContainer.addEventListener('change', (event) => {
                 const selectedCheckboxes = document.querySelectorAll('#word-list input:checked');
                 counterEl.textContent = selectedCheckboxes.length;
                 
                 if (selectedCheckboxes.length > MAX_WORDS) {
                     event.target.checked = false; // 15 tadan ortiq tanlashni bloklash
                     alert(`Maksimal ${MAX_WORDS} ta so'z tanlash mumkin!`);
-                    counterEl.textContent = MAX_WORDS;
+                    counterEl.textContent = MAX_WORDS; // Hisoblagichni to'g'rilash
                 }
                 
                 startBtn.disabled = selectedCheckboxes.length === 0;
             });
 
-            // Testni boshlash tugmasi
+            // "Tayyorgarlikni Boshlash" tugmasi bosilganda
             startBtn.addEventListener('click', () => {
                 const selectedWords = [];
                 document.querySelectorAll('#word-list input:checked').forEach(checkbox => {
                     selectedWords.push(JSON.parse(checkbox.value));
                 });
                 
-                // Tanlangan so'zlarni keyingi sahifa uchun saqlash
+                // Tanlangan so'zlarni keyingi sahifaga uzatish uchun vaqtinchalik xotiraga saqlash
                 sessionStorage.setItem('testWords', JSON.stringify(selectedWords));
                 window.location.href = 'test-prepare.html';
             });
