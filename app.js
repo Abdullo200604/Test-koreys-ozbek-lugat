@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Ma'lumotlar bazasini ishga tushirish
     initializeDB();
 
-    const adminTrigger = document.getElementById('admin-trigger');
+    const adminTrigger = document.getElementById('admin-icon');
     if (adminTrigger) {
         let clickCount = 0;
         let clickTimer = null;
