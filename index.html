@@ -1,25 +1,35 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hangul Helper - Bosh sahifa</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Koreys Tili</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="container">
-        <div id="admin-icon"></div>
-    
-        <h1 id="admin-trigger">Hangul Helper</h1>
-        <p>Til o'rganishga yordamchi dastur</p>
-        
-        <div class="menu">
-            <a href="test-selection.html" class="btn">🧠 Test Boshlash</a>
-            <a href="lessons.html" class="btn">📚 Misollar (Darslar)</a>
-            <a href="https://abdullo200604.github.io/Test-koreys-ozbek-lugat/" class="btn">📝 Lug'at Testi (Eski versiya)</a>
-        </div>
-    </div>
+<body class="home-body">
+  <!-- Orqa fon animatsiyasi -->
+  <div class="background-animation">
+    <div class="trigram">☰</div>
+    <div class="trigram">☷</div>
+    <div class="trigram">☵</div>
+    <div class="trigram">☲</div>
+  </div>
 
-    <script src="app.js"></script>
+  <!-- Asosiy kontent -->
+  <div class="main-container">
+    <header class="main-header">
+      <h1 class="title">Koreys Tili</h1>
+      <p class="subtitle">O‘rganishni boshlang</p>
+    </header>
+
+    <!-- Menyu tugmalari -->
+    <nav class="main-nav">
+      <a href="lessons.html" class="nav-button"><span>📚 Lug‘atlar</span></a>
+      <a href="test-selection.html" class="nav-button"><span>📝 Test</span></a>
+      <a href="examples.html" class="nav-button"><span>📖 Misollar</span></a>
+      <a href="https://abdullo200604.github.io/Hangul-Helper/harflar.html" class="nav-button"><span>🔤 Harflar</span></a>
+      <a href="https://abdullo200604.github.io/Hangul-Helper/raqamlar.html" class="nav-button"><span>🔢 Raqamlar</span></a>
+    </nav>
+  </div>
 </body>
 </html>
